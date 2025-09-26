@@ -1,0 +1,52 @@
+name: Check Version
+on:
+
+    pull_request:
+        branches:
+            - prod
+jobs:
+    check_version:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v5
+              with: 
+                  fetch-depth: 0
+
+            - name: Setup Node
+              uses: actions/setup-node@v5
+              with:
+                  node-version: latest
+            
+            - name: Install deps
+              run: npm install yaml
+
+            - name: Check Version
+              run: |
+                  node - <<'EOF'
+                  import fs from "fs";
+                  import { execSync } from "child_process";
+                  import YAML from "yaml";
+
+
+                  const prYaml = YAML.parse(fs.readFileSync("pubspec.yaml", "utf8"));
+                  const prVersion = prYaml.version.split(".");
+
+                  const baseFile = execSync("git show origin/prod:pubspec.yaml").toString();
+                  const baseYaml = YAML.parse(baseFile);
+                  const baseVersion = baseYaml.version.split(".");
+
+                  const major = Number(baseVersion[0]) < Number(prVersion[0]);
+                  const minor = Number(baseVersion[1]) < Number(prVersion[1]);
+                  const patch = Number(baseVersion[2]) < Number(prVersion[2]);
+
+                  if (major || minor || patch) {
+                      console.log(`Version bumped (${prVersion.join(".")} > ${baseVersion.join(".")})`);
+                      process.exit(0);
+                  } else {
+                      console.log(`Version not bumped (${prVersion.join(".")} <= ${baseVersion.join(".")})`);
+                      process.exit(1);
+                  }
+                  EOF
+
+            
