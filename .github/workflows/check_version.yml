@@ -1,9 +1,8 @@
 name: Check Version
 on:
-
     pull_request:
         branches:
-            - prod
+            - dev
 jobs:
     check_version:
         runs-on: ubuntu-latest
@@ -32,7 +31,7 @@ jobs:
                   const prYaml = YAML.parse(fs.readFileSync("pubspec.yaml", "utf8"));
                   const prVersion = prYaml.version.split(".");
 
-                  const baseFile = execSync("git show origin/prod:pubspec.yaml").toString();
+                  const baseFile = execSync("git show origin/dev:pubspec.yaml").toString();
                   const baseYaml = YAML.parse(baseFile);
                   const baseVersion = baseYaml.version.split(".");
 
