@@ -5,7 +5,7 @@ interested in.
 
 ## Download
 This app is avilable for android and web. IOS support is possible, but I'm currently reluctant to
-enable it, because, well, need of side-loading. Feel free to comment in discussion #1
+enable it, because, well, need of side-loading. Feel free to comment in [discussion](https://github.com/saviusz/timetable-app/discussions/1)
 
 To download head to [Releases](https://github.com/saviusz/timetable-app/releases/latest)
 
